@@ -31,6 +31,16 @@ Route::get("/greet/{name}", function ($name) {
     return "Hello $name!";
 });
 
+Route::get("/tasks/{id}", function ($id) use ($tasks) {
+    $task = collect($tasks)->firstWhere('id', $id);
+
+    if (!$task) {
+        abort(404);
+    };
+
+    return view('show', ["task" => $task]);
+});
+
 // If user try to access route that doesn't exist
 Route::fallback(function () {
     return "Still got somewhere!";
