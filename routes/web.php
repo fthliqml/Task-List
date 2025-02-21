@@ -18,6 +18,7 @@ Route::get('/tasks', function () {
     ]);
 })->name("tasks.index");
 
+// Use View if we doesn't need sending data to views
 Route::view('/tasks/create', 'create')->name("tasks.create");
 
 Route::get("/tasks/{id}", function ($id) {
@@ -25,7 +26,27 @@ Route::get("/tasks/{id}", function ($id) {
 })->name("tasks.show");
 
 Route::post('/tasks', function (Request $request) {
-    dd($request->all());
+    $data = $request->validate([
+        'title' => 'required|max:255',
+        'description' => 'required',
+        'long_description' => 'required'
+    ], [
+        'title.required' => "Judul tidak boleh kosong!",
+        'description.required' => "Deskripsi tidak boleh kosong!",
+        'long_description.required' => "Deskripsi panjang tidak boleh kosong!"
+    ]);
+
+    // create new task model
+    $task = new Task;
+    $task->title = $data['title'];
+    $task->description = $data['description'];
+    $task->long_description = $data['long_description'];
+
+    // insert data
+    $task->save();
+
+    return redirect()->route("tasks.show", ['id' => $task->id])
+        ->with('success', 'Task created successfully!');
 })->name('tasks.store');
 
 // If user try to access route that doesn't exist

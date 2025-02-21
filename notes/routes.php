@@ -31,6 +31,9 @@ Route::get("/greet/{name}", function ($name) {
     return "Hello $name!";
 });
 
+// Use View if we doesn't need sending data to views
+Route::view('/tasks/create', 'create')->name("tasks.create");
+
 Route::get("/tasks/{id}", function ($id) use ($tasks) {
     $task = collect($tasks)->firstWhere('id', $id);
 
