@@ -70,7 +70,7 @@ Route::get("/tasks/{id}", function ($id) use ($tasks) {
     $task = collect($tasks)->firstWhere('id', $id);
 
     if (!$task) {
-        abort(Response::HTTP_NOT_FOUND);
+        abort(404);
     };
 
     return view('show', ["task" => $task]);
