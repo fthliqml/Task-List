@@ -15,9 +15,9 @@ Route::get('/tasks', function () {
         // "tasks" => Task::orderBy('id', 'desc')->get()
 
         /*
-         *  get recent updated data first
+         *  get recent data first
          */
-        "tasks" => Task::latest('updated_at')->paginate(10)
+        "tasks" => Task::latest()->paginate(10)
     ]);
 })->name("tasks.index");
 
