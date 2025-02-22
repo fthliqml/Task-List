@@ -44,6 +44,13 @@ Route::put('/tasks/{task}', function (Task $task, TaskRequest $request) {
         ->with('success', 'Task edited successfully!'); // flash message, accept in view using session()
 })->name('tasks.update');
 
+Route::delete("/tasks/{task}", function (Task $task) {
+    $task->delete();
+
+    return redirect()->route("tasks.index")
+        ->with("success", "Task deleted successfully!");
+})->name("tasks.destroy");
+
 // If user try to access route that doesn't exist
 Route::fallback(function () {
     return "Still got somewhere!";
