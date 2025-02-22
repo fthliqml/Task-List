@@ -56,6 +56,13 @@ Route::delete("/tasks/{task}", function (Task $task) {
         ->with("success", "Task deleted successfully!");
 })->name("tasks.destroy");
 
+Route::put('/tasks/{task}/toggle-complete', function (Task $task) {
+    $task->toggleComplete();
+
+    // also means we don't want redirect to any route
+    return back()->with('success', 'Task updated successfully!');
+})->name('tasks.toggle-complete');
+
 // If user try to access route that doesn't exist
 Route::fallback(function () {
     return "Still got somewhere!";
