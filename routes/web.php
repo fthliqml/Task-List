@@ -12,7 +12,12 @@ Route::get('/tasks', function () {
     return view("index", [
         // "tasks" => Task::all()
         // "tasks" => Task::latest()->where('completed', true)->get()
-        "tasks" => Task::latest()->get() // get recent data first
+        // "tasks" => Task::orderBy('id', 'desc')->get()
+
+        /*
+         *  get recent updated data first
+         */
+        "tasks" => Task::latest('updated_at')->paginate(10)
     ]);
 })->name("tasks.index");
 
