@@ -21,9 +21,40 @@ Route::get('/tasks', function () {
 // Use View if we doesn't need sending data to views
 Route::view('/tasks/create', 'create')->name("tasks.create");
 
+
 Route::get("/tasks/{id}", function ($id) {
     return view('show', ["task" => Task::findOrFail($id)]);
 })->name("tasks.show");
+
+Route::get("/tasks/{id}/edit", function ($id) {
+    return view("edit", [
+        "task" => Task::findOrFail($id)
+    ]);
+})->name("tasks.edit");
+
+Route::put('/tasks/{id}', function ($id, Request $request) {
+    $data = $request->validate([
+        'title' => 'required|max:255',
+        'description' => 'required',
+        'long_description' => 'required'
+    ], [
+        'title.required' => "Judul tidak boleh kosong!",
+        'description.required' => "Deskripsi tidak boleh kosong!",
+        'long_description.required' => "Deskripsi panjang tidak boleh kosong!"
+    ]);
+
+    // find data
+    $task = Task::findOrFail($id);
+    $task->title = $data['title'];
+    $task->description = $data['description'];
+    $task->long_description = $data['long_description'];
+
+    // edit data
+    $task->save();
+
+    return redirect()->route("tasks.show", ['id' => $task->id])
+        ->with('success', 'Task edited successfully!'); // flash message, accept in view using session()
+})->name('tasks.update');
 
 Route::post('/tasks', function (Request $request) {
     $data = $request->validate([
