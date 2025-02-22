@@ -8,8 +8,8 @@
     @vite('resources/css/app.css')
 </head>
 
-<body>
-    <h1>@yield('title')</h1>
+<body class="container mx-auto my-10 max-w-lg">
+    <h1 class="font-bold underline">@yield('title')</h1>
     <div>
         @if (session()->has('success'))
             <div>{{ session('success') }}</div>
